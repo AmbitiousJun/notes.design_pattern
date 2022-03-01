@@ -242,3 +242,41 @@ public Object readResolve() {
 
 ![](./images/readResolve保护单例模式.png)
 
+## 3.2 反射
+```java
+public class Client1 {
+
+    public static void main(String[] args) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        // 获取Singleton类的无参构造，并设置访问权限
+        Class<Singleton> clazz = Singleton.class;
+        Constructor<Singleton> cons = clazz.getDeclaredConstructor();
+        cons.setAccessible(true);
+        // 通过构造方法实例化两个对象
+        Singleton instance1 = cons.newInstance();
+        Singleton instance2 = cons.newInstance();
+        System.out.println(instance1);
+        System.out.println(instance2);
+    }
+}
+```
+
+![](./images/使用反射破坏单例模式.png)
+
+**解决方法：**
+在构造方法中添加同步判断，只要发现是第二次调用构造方法，就抛出异常
+
+```java
+private static boolean flag = false;
+
+private Singleton() {
+    synchronized(Singleton.class) {
+        if(flag) {
+            throw new RuntimeException("不能创建多个对象");
+        }
+        flag = true;
+    }
+}
+```
+
+![](./images/解决反射破坏单例模式问题.png)
+
