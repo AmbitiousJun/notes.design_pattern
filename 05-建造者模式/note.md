@@ -151,3 +151,98 @@ public class Client {
 
 ![](./images/建造者模式-案例运行结果.png)
 
+# 4 建造者模式扩展
+建造者模式除了上面的用途外，在开发中还有一个常用的使用方式，就是`当一个类构造器需要传入很多参数时，如果创建这个类的实例，代码可读性会非常差，而且很容易引入错误`，此时就可以利用建造者模式进行重构。
+
+> 思路：
+> 1. 将需要使用建造者模式构建的类的构造方法私有化，并且参数为Builder类型
+> 2. 在其内部定义一个静态内部类（Builder）
+> 3. 在内部类中定义与外部类相同的属性
+> 4. 为每一个属性提供赋值方法，返回值为自身（Builder）
+> 5. 最后再提供一个build方法，返回值为外部类
+
+代码实现：
+```java
+public class Computer {
+
+    private String cpu;
+    private String screen;
+    private String memory;
+    private String mainBoard;
+
+    private Computer(Builder builder) {
+        this.cpu = builder.cpu;
+        this.screen = builder.screen;
+        this.memory = builder.memory;
+        this.mainBoard = builder.mainBoard;
+    }
+
+    @Override
+    public String toString() {
+        return "Computer{" +
+                "cpu='" + cpu + '\'' +
+                ", screen='" + screen + '\'' +
+                ", memory='" + memory + '\'' +
+                ", mainBoard='" + mainBoard + '\'' +
+                '}';
+    }
+
+    public static final class Builder {
+        private String cpu;
+        private String screen;
+        private String memory;
+        private String mainBoard;
+
+        public Builder cpu(String cpu) {
+            this.cpu = cpu;
+            return this;
+        }
+
+        public Builder screen(String screen) {
+            this.screen = screen;
+            return this;
+        }
+
+        public Builder memory(String memory) {
+            this.memory = memory;
+            return this;
+        }
+
+        public Builder mainBoard(String mainBoard) {
+            this.mainBoard = mainBoard;
+            return this;
+        }
+
+        public Computer build() {
+            return new Computer(this);
+        }
+    }
+}
+```
+
+在外部使用Builder对象构建Computer对象：
+
+```java
+public static void main(String[] args) {
+        Computer computer = new Computer.Builder()
+                .cpu("Intel")
+                .screen("三星屏幕")
+                .memory("金士顿内存条")
+                .mainBoard("华硕主板")
+                .build();
+        System.out.println(computer);
+    }
+```
+
+![](./images/建造者模式-案例2运行结果.png)
+
+# 5 建造者模式与其他模式的区别
+
+## 5.1 与工厂方法模式的区别
+- 工厂方法模式注重`整体对象的创建方式`
+- 建造者模式注重`部件构建的过程`
+
+## 5.2 与抽象工厂模式的区别
+- 抽象工厂模式注重`一个产品族中配件的生产`
+- 建造者模式注重`怎么通过配件组装得到一个完整的产品`
+
