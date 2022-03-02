@@ -111,7 +111,7 @@ cglib是第三方提供的包，坐标如下：
 ```
 
 代理工厂类代码：
-- 实现MethodInterceptor接口，重写interceptor方法，这个方法与jdk代理中InvocationHandler的invoke方法是一致的。
+- 实现MethodInterceptor接口，重写intercept方法，这个方法与jdk代理中InvocationHandler的invoke方法是一致的。
 - 给定获取代理类对象的方法
 ```java
 public class ProxyFactory implements MethodInterceptor {
