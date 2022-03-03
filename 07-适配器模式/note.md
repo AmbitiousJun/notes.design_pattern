@@ -186,4 +186,3 @@ public static void main(String[] args) {
 ```
 
 ![](./images/对象适配器案例-运行结果.png)
-
